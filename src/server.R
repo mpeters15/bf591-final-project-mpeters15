@@ -20,6 +20,26 @@ server <- function(input, output, session) {
     return(data)
   })
   
+  p2_counts_matrix.load_data <- reactive({
+
+    return(data)
+  })
+  
+  p3_differential_expression.load_data <- reactive({
+
+    return(data)
+  })
+  
+  p4_gene_expression.load_data1 <- reactive({
+
+    return(data)
+  })
+  
+  p4_gene_expression.load_data2 <- reactive({
+
+    return(data)
+  })
+  
   ############################
   ######### PANEL 1 ##########
   ############################
@@ -74,6 +94,20 @@ server <- function(input, output, session) {
       return(plot)
     }
   })
+  
+  ############################
+  ######### PANEL 2 ##########
+  ############################
+  
+  
+  ############################
+  ######### PANEL 3 ##########
+  ############################
+  
+  
+  ############################
+  ######### PANEL 4 ##########
+  ############################
   
   
 }
