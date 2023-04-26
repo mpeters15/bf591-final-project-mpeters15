@@ -99,6 +99,85 @@ server <- function(input, output, session) {
   ######### PANEL 2 ##########
   ############################
   
+  p2_counts_matrix.slider_percentile_variance <- reactive({
+    if (is.null(input$p2_slider_percentile_variance))
+      return(50)
+    input$p2_slider_percentile_variance
+  })
+  
+  p2_counts_matrix.slider_nonzero_gene_samples <- reactive({
+    if (is.null(input$p2_slider_nonzero_gene_samples))
+      return(2)
+    input$p2_slider_nonzero_gene_samples
+  })
+  
+  p2_counts_matrix.radio_principal_component_1 <- reactive({
+    if (is.null(input$p2_radio_principal_component_1))
+      return(1)
+    input$p2_radio_principal_component_1
+  })
+  
+  p2_counts_matrix.radio_principal_component_2 <- reactive({
+    if (is.null(input$p2_radio_principal_component_2))
+      return(2)
+    input$p2_radio_principal_component_2
+  })
+  
+  p2_counts_matrix.slider_pca <- reactive({
+    if (is.null(input$p2_slider_pca))
+      return(5)
+    input$p2_slider_pca
+  })
+  
+  output$p1_datatableoutput_sample_information_data <- renderDataTable({
+    data <- p1_sample_information.load_data()
+    return(data)
+  }, options = list(
+    rownames = TRUE,
+    pageLength = 10,
+    autoWidth = TRUE,
+    scrollX = TRUE
+  ))
+  
+  output$p2_datatableoutput_filter_summary <- renderDataTable({
+    data <- p2_counts_matrix.load_data()
+    subset <- select(data, -1)
+    num_genes <- nrow(subset)
+    num_samples <- ncol(subset)
+    data_filtered <- data %>%
+      threshold_row_variance(
+        p2_counts_matrix.slider_percentile_variance() / 100,
+        p2_counts_matrix.slider_nonzero_gene_samples()
+      ) %>%
+      filter(Pass == 'pass')
+    npass <- nrow(select(data_filtered, -c(1:5)))
+    nfail <- num_genes - npass
+    result <- data_filtered %>%
+      summarize("Total" = num_genes,
+                "Pass" = npass,
+                "Fail" = nfail) %>%
+      pivot_longer(cols = everything(),
+                   names_to = "X",
+                   values_to = "Genes") %>%
+      mutate("Percentage (%) of genes passing filter" = round(Genes / num_genes * 100, 1),
+            "Number of genes passing filter" = Genes,
+            " " = X) %>%
+      select(" ",
+            "Number of genes passing filter",
+            "Percentage (%) of genes passing filter")
+    output$p2_htmloutput_sample_size <- renderText({
+      paste("<b>Number of samples: ", num_samples, "</b>")
+    })
+    return(result)
+  }, options = list(
+    rownames = FALSE,
+    colnames = FALSE,
+    paging = FALSE,
+    width = "100%",
+    searching = FALSE,
+    scrollX = TRUE
+  ))
+  
   
   ############################
   ######### PANEL 3 ##########

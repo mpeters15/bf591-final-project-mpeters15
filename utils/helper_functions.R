@@ -43,7 +43,19 @@ summarize_metadata <- function(x) {
   }
   list(column_type, column_summary)
 }
-  list(column_type, description)
+
+threshold_row_variance <- function(data, percentile, nsampl) {
+  subset <- select(data, -1)
+  row_variance <- subset %>% 
+    apply(1, var, na.rm = TRUE)
+  cutoff_value <- quantile(row_variance, probs = percentile)
+  idx <- which(row_variance > cutoff_value & rowSums(subset != 0) >= nsampl)
+  data %>% 
+    mutate(Pass = if_else(row_number() %in% idx, "pass", "fail"),
+           NumZeros = rowSums(subset == 0),
+           Median = apply(subset, 1, median, na.rm = TRUE),
+           RowVariance = row_variance) %>%
+    relocate(Pass, NumZeros, Median, RowVariance, .after = 1)
 }
 
 }
