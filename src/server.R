@@ -10,9 +10,7 @@ server <- function(input, output, session) {
   p1_sample_information.load_data <- reactive({
     data <- read_csv_file(input$p1_fileinput_sample_information, convert = TRUE)
     if (!is.null(data)) {
-      choices <- data %>%
-        select_if(~ is.numeric(.) && n_distinct(.) > 2) %>%
-        names()
+      choices <- names(Filter(function(x) is.numeric(x) && n_distinct(x) > 2, data))
       observe({
         updateRadioButtons(session, "p1_radio_sample_information", choices = choices)
       })
@@ -21,22 +19,44 @@ server <- function(input, output, session) {
   })
   
   p2_counts_matrix.load_data <- reactive({
-
+    data <- read_csv_file(input$p2_fileinput_normalized_counts_matrix)
+    if (!is.null(data)) {
+      observe({
+        updateSliderInput(
+          session,
+          "p2_slider_nonzero_gene_samples",
+          max = ncol(data),
+          value = median(ncol(data)/2)
+        )
+      })
+    }
     return(data)
   })
   
   p3_differential_expression.load_data <- reactive({
-
+    data <- read_csv_file(input$p3_fileinput_differential_expression_results)
     return(data)
   })
   
   p4_gene_expression.load_data1 <- reactive({
-
+    data <- read_csv_file(input$p4_fileinput_normalized_counts_data)
+    if (!is.null(data)) {
+      observe({
+        updateSelectizeInput(inputId = "p4_selectizeinput_gene_search",
+                             choices = c("Search Bar" = "", unique(data[, 1])))
+      })
+    }
     return(data)
   })
   
   p4_gene_expression.load_data2 <- reactive({
-
+    data <- read_csv_file(input$p4_fileinput_sample_information, convert = TRUE)
+    if (!is.null(data)) {
+      observe({
+        choices <- names(Filter(is.factor, data))
+        updateRadioButtons(session, "p4_radio_categorical_column", choices = choices)
+      })
+    }
     return(data)
   })
   
