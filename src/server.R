@@ -64,7 +64,7 @@ server <- function(input, output, session) {
   ######### PANEL 1 ##########
   ############################
   
-  p1_sample_information.radio1 <- reactive({
+  p1_sample_information.radio_sample_information <- reactive({
     input$p1_radio_sample_information
   })
   
@@ -295,6 +295,46 @@ server <- function(input, output, session) {
   ######### PANEL 3 ##########
   ############################
   
+  p3_differential_expression.radio_x_axis <- reactive({
+    input$p3_radio_x_axis
+  })
+  
+  p3_differential_expression.radio_y_axis <- reactive({
+    input$p3_radio_y_axis
+  })
+  
+  p3_differential_expression.sliderinput_padj <- reactive({
+    input$p3_sliderinput_padj
+  })
+  
+  p3_differential_expression.colorinput_base_point <- reactive({
+    input$p3_colorinput_base_point
+  })
+  
+  p3_differential_expression.colorinput_highlight_point <- reactive({
+    input$p3_colorinput_highlight_point
+  })
+  
+  output$p3_datatableoutput_differential_expression_results <- renderDataTable({
+    data <- p3_differential_expression.load_data()
+    return(data)
+  }, options = list(
+    rownames = TRUE,
+    pageLength = 10,
+    autoWidth = TRUE,
+    scrollX = TRUE
+  ))
+  
+  output$p3_plotoutput_volcano <- renderPlot({
+    volcano_plot(
+      p3_differential_expression.load_data(),
+      p3_differential_expression.radio_x_axis(),
+      p3_differential_expression.radio_y_axis(),
+      p3_differential_expression.sliderinput_padj(),
+      p3_differential_expression.colorinput_base_point(),
+      p3_differential_expression.colorinput_highlight_point()
+    )
+  })
   
   ############################
   ######### PANEL 4 ##########

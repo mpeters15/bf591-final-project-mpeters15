@@ -58,4 +58,28 @@ threshold_row_variance <- function(data, percentile, nsampl) {
     relocate(Pass, NumZeros, Median, RowVariance, .after = 1)
 }
 
+volcano_plot <- function(dataf, x_name, y_name, slider, color1, color2) {
+    plt <-
+      ggplot2::ggplot(dataf, aes(
+        x = !!sym(x_name),
+        y = -log10(!!sym(y_name)),
+        color = padj < (1 * (10 ** slider))
+      )) +
+      geom_point() +
+      scale_colour_manual(
+        name = sprintf("padj < 1 × 10^%s", slider),
+        values = c(
+          "FALSE" = color1,
+          "TRUE" = color2,
+          "NA" = "grey"
+        )
+      ) +
+      labs(x = x_name,
+            y = sprintf("-log10(%s)", y_name)) +
+      theme_minimal() +
+      theme(legend.position = "bottom")
+    
+    return(plt)
+  }
+
 }
