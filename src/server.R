@@ -178,6 +178,98 @@ server <- function(input, output, session) {
     scrollX = TRUE
   ))
   
+  output$p2_plotoutput_median_count_vs_variance <- renderPlot({
+    data <- p2_counts_matrix.load_data()
+    data <- threshold_row_variance(
+      data,
+      p2_counts_matrix.slider_percentile_variance() / 100,
+      p2_counts_matrix.slider_nonzero_gene_samples()
+    )
+    data$logMedian <- log(data$Median + 1)
+    plot <- ggplot(data = data, aes(x = logMedian, y = log(RowVariance))) +
+      geom_point(aes(color = Pass)) +
+      labs(color = "Genes Passing Set Filter") +
+      scale_color_manual(values = c("#e74c3c", "#00a65a")) +
+      theme_classic()
+    return(plot)
+  })
+  
+  output$p2_plotoutput_median_count_vs_number_of_zeros <- renderPlot({
+    data <- p2_counts_matrix.load_data()
+    data <- threshold_row_variance(
+      data,
+      p2_counts_matrix.slider_percentile_variance() / 100,
+      p2_counts_matrix.slider_nonzero_gene_samples()
+    )
+    data$logMedian <- log(data$Median + 1)
+    plot <- ggplot(data = data, aes(x = logMedian, y = NumZeros)) +
+      geom_point(aes(color = Pass)) +
+      labs(color = "Genes Passing Set Filter") +
+      scale_color_manual(values = c("#e74c3c", "#00a65a")) +
+      theme_classic()
+    return(plot)
+  })
+  
+  output$p2_plotoutput_heatmap <- renderPlot({
+    data <- p2_counts_matrix.load_data()
+    data <-
+      threshold_row_variance(
+        data,
+        p2_counts_matrix.slider_percentile_variance() / 100,
+        p2_counts_matrix.slider_nonzero_gene_samples()
+      )
+    filt_data <- data[data$Pass == 'pass', ]
+    filt_data <- filt_data[-c(1:5)]
+    filt_data <- log(filt_data + 1)
+    label_name <- "Log(Counts)"
+    plot <- Heatmap(
+      filt_data,
+      name = label_name,
+      show_row_names = FALSE,
+      cluster_rows = FALSE,
+      cluster_columns = TRUE,
+      heatmap_legend_param = list()
+    ) + 
+    labs(title = "Heatmap of Log-Transformed Gene Counts")
+    return(plot)
+  })
+  
+  output$p2_plotoutput_scatter_pca <- renderPlot({
+    data <- p2_counts_matrix.load_data()
+    data <-
+      threshold_row_variance(
+        data,
+        p2_counts_matrix.slider_percentile_variance() / 100,
+        p2_counts_matrix.slider_nonzero_gene_samples()
+      )
+    filt_data <- subset(data, Pass == 'pass', select = -c(1:5))
+    if (nrow(filt_data) == 0) {
+      return(NULL)
+    }
+    pca <- prcomp(filt_data)
+    pca_df <- as.data.frame(pca$x)
+    pca_variance <- pca$sdev^2
+    percent_variance <- pca_variance / sum(pca_variance)
+    PC1 <- as.integer(p2_counts_matrix.radio_principal_component_1())
+    PC2 <- as.integer(p2_counts_matrix.radio_principal_component_2())
+    x_lab <- sprintf("PC%d, variance: %.2f%%", PC1, percent_variance[PC1] * 100)
+    y_lab <- sprintf("PC%d, variance: %.2f%%", PC2, percent_variance[PC2] * 100)
+    
+    plot <- ggplot(pca_df, aes(x = !!sym(paste0("PC", PC1)), y = !!sym(paste0("PC", PC2)))) +
+      geom_point() +
+      labs(x = x_lab, y = y_lab, title = "PCA Scatter Plot") +
+      theme(
+        legend.position = "bottom",
+        plot.title = element_text(size = 14, face = "bold", margin = margin(b = 10)),
+        axis.text = element_text(size = 12),
+        axis.title = element_text(size = 14),
+        panel.background = element_rect(fill = "white"),
+        panel.grid.major = element_line(color = "#F2F2F2"),
+        panel.grid.minor = element_blank()
+      ) +
+      theme_classic()
+    return(plot)
+  })
   
   ############################
   ######### PANEL 3 ##########

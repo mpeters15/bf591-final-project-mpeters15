@@ -47,7 +47,6 @@ counts_matrix <- tabPanel("Counts Matrix",
                                   "Clustered Heatmap",
                                   br(),
                                   mainPanel(
-                                    markdown("Clustered Heatmap of Counts Post-Filtering"),
                                     plotOutput("p2_plotoutput_heatmap"), 
                                   ),
                                   # ),
