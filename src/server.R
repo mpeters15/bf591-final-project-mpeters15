@@ -340,5 +340,33 @@ server <- function(input, output, session) {
   ######### PANEL 4 ##########
   ############################
   
+  p4_gene_expression.radio_categorical_column <- reactive({
+    input$p4_radio_categorical_column
+  })
   
+  p4_gene_expression.radio_plot_type <- reactive({
+    if (is.null(input$p4_radio_plot_type))
+      return("bar plot")
+    input$p4_radio_plot_type
+  })
+  
+  output$p4_plotoutput_chosen_plot <- renderPlot({
+    data_counts <- p4_gene_expression.load_data1()
+    data_sample_info <- p4_gene_expression.load_data2()
+    gene <- input$p4_selectizeinput_gene_search
+    if (gene == "") {
+      output$p4_textoutput_gene_selection <- renderText({
+        paste(c(""))
+      })
+      return(NULL)
+    } 
+    idx <- which(data_counts[, 1] == gene)
+    colname <- p4_gene_expression.radio_categorical_column()
+    plot_data <- data_counts[idx, -1]
+    plot_data <- as.data.frame(t(plot_data))
+    plot_data[, colname] <- as.factor(data_sample_info[, colname])
+    colnames(plot_data) <- c("gene_expression", colname)
+    plot <- multi_plot(plot_data, p4_gene_expression.radio_plot_type(), colname)
+    return(plot)
+  })
 }

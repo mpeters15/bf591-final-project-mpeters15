@@ -46,7 +46,7 @@ gene_expression <- tabPanel("Visualization of Individual Gene Expression",
                                 submitButton("Plot", width = '100%')
                               ),
                               mainPanel(
-                                textOutput("p4_textoutput_error_message"),
+                                textOutput("p4_textoutput_gene_selection"),
                                 plotOutput("p4_plotoutput_chosen_plot"),
                               ),
                             ),
