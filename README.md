@@ -80,13 +80,13 @@ The distinct values and distributions of sample information are important to und
 
 **Inputs**:
 
-[x] Sample information matrix in CSV format
+- [x] Sample information matrix in CSV format
 
 **Shiny Functionalities**:
 
-[x] Tab with a summary of the table that includes a summary of the number of rows and columns, and type and values in each column
-[x] Tab with a data table displaying the sample information, with sortable columns
-[x] Tab with histograms, density plots, or violin plots of continuous variables.
+- [x] Tab with a summary of the table that includes a summary of the number of rows and columns, and type and values in each column
+- [x] Tab with a data table displaying the sample information, with sortable columns
+- [x] Tab with histograms, density plots, or violin plots of continuous variables.
 
 ### Counts Matrix Exploration
 
@@ -97,30 +97,30 @@ effects using diagnostic plots of the counts matrix.
 
 **Inputs**:
 
-[x] Normalized counts matrix, by some method or other, in CSV format
+- [x] Normalized counts matrix, by some method or other, in CSV format
 * Input controls that filter out genes based on their statistical properties:
-  [x] Slider to include genes with at least X percentile of variance
-  [x] Slider to include genes with at least X samples that are non-zero
+  - [x] Slider to include genes with at least X percentile of variance
+  - [x] Slider to include genes with at least X samples that are non-zero
 
 **Shiny Functionalities**:
 
 * Tab with text or a table summarizing the effect of the filtering, including:
-  [x] number of samples
-  [x] total number of genes
-  [x] number and % of genes passing current filter
-  [x] number and % of genes not passing current filter
+  - [x] number of samples
+  - [x] total number of genes
+  - [x] number and % of genes passing current filter
+  - [x] number and % of genes not passing current filter
 * Tab with diagnostic scatter plots, where genes passing filters are marked in
 a darker color, and genes filtered out are lighter:
-  [x] median count vs variance (consider log scale for plot)
-  [x] median count vs number of zeros
-[x] Tab with a clustered heatmap of counts remaining after filtering
+  - [x] median count vs variance (consider log scale for plot)
+  - [x] median count vs number of zeros
+- [x] Tab with a clustered heatmap of counts remaining after filtering
   - consider enabling log-transforming counts for visualization
-  [x] be sure to include a color bar in the legend
-[x] Tab with a scatter plot of principal component analysis projections. You may either:
-  [x] allow the user to select which principal components to plot in a scatter
+  - [x] be sure to include a color bar in the legend
+- [x] Tab with a scatter plot of principal component analysis projections. You may either:
+  - [x] allow the user to select which principal components to plot in a scatter
   plot (e.g. PC1 vs PC2)
   - allow the user to plot the top $N$ principal components as a beeswarm plot
-  [x] be sure to include the % variance explained by each component in the plot
+  - [x] be sure to include the % variance explained by each component in the plot
   labels
 
 ### Differential Expression
@@ -132,15 +132,15 @@ explore a differential expression dataset.
 **Inputs**:
 
 * Results of a differential expression analysis in CSV format.
-  [x] If results are already made available, you may use those
+  - [x] If results are already made available, you may use those
   - Otherwise perform a differential expression analysis using DESeq2, limma, or
     edgeR from the provided counts file
 
 **Shiny Functionalities**:
 
-[x] Tab with sortable table displaying differential expression results
-  [x] Optional: enable gene name search functionality to filter rows of table
-[x] Tab with content similar to that described in [Assignment 7]
+- [x] Tab with sortable table displaying differential expression results
+  - [x] Optional: enable gene name search functionality to filter rows of table
+- [x] Tab with content similar to that described in [Assignment 7]
 
 ### Visualization of Individual Gene Expression(s)
 
@@ -152,17 +152,17 @@ desired sample information variable.
 
 **Input**:
 
-[x] Normalized counts matrix, by some method or other, in CSV format
-[x] Sample information matrix in CSV format
-[x] Input control that allows the user to choose one of the categorical fields
+- [x] Normalized counts matrix, by some method or other, in CSV format
+- [x] Sample information matrix in CSV format
+- [x] Input control that allows the user to choose one of the categorical fields
 found in the sample information matrix file
-[x] Input control that allows the user to choose one of the genes found in the
+- [x] Input control that allows the user to choose one of the genes found in the
 counts matrix (hint: try implementing a [search box](https://stackoverflow.com/questions/47336114/searchbox-in-r-shiny))
-[x] Input control allowing the user to select one of bar plot, boxplot, 
+- [x] Input control allowing the user to select one of bar plot, boxplot, 
 violin plot, or beeswarm plot
-[x] A button that makes the thing go
+- [x] A button that makes the thing go
 
 **Shiny Functionalities**:
 
-[x] Content displaying a plot of the selected type with the normalized gene counts
+- [x] Content displaying a plot of the selected type with the normalized gene counts
 for the selected gene split out by the categorical variable chosen
