@@ -83,32 +83,26 @@ multi_plot <- function(data, type, colname) {
   plot <- NULL
   if (type == "bar plot") {
     plot <- ggplot(data, aes_string(x = colname, fill = colname)) +
-      geom_bar() +
-      ylab("Gene Expression") +
-      theme_minimal() + 
-      scale_fill_brewer(palette = "Paired")
+      geom_bar()
   } else if (type == "box plot") {
     plot <-
       ggplot(data, aes_string(x = colname, y = "gene_expression", fill = colname)) +
-      geom_boxplot() +
-      ylab("Gene Expression") +
-      theme_minimal() + 
-      scale_fill_brewer(palette = "Paired")
+      geom_boxplot()
   } else if (type == "violin plot") {
     plot <-
       ggplot(data, aes_string(x = colname, y = "gene_expression", fill = colname)) +
       geom_violin(trim = FALSE) +
-      geom_boxplot(width = 0.07) +
-      ylab("Gene Expression") +
-      theme_minimal() + 
-      scale_fill_brewer(palette = "Paired")
+      geom_boxplot(width = 0.07)
   } else if (type == "beeswarm plot") {
     plot <-
       ggplot(data, aes_string(x = colname, y = "gene_expression", color = colname)) +
-      geom_beeswarm(cex = 3, aes(size = 1)) +
-      ylab("Gene Expression") +
-      theme_minimal() + 
-      scale_color_brewer(palette = "Paired")
+      geom_beeswarm(cex = 3, aes(size = 1))
   }
-  return(plot + theme(legend.position = "bottom"))
+  return(
+    plot + 
+    theme(legend.position = "bottom") + 
+    ylab("Normalized Gene Counts") + 
+    scale_fill_brewer(palette = "Paired") +
+    theme_minimal()
+  )
 }
