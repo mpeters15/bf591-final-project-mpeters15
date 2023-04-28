@@ -177,12 +177,12 @@ server <- function(input, output, session) {
       pivot_longer(cols = everything(),
                    names_to = "X",
                    values_to = "Genes") %>%
-      mutate("Percentage (%) of genes passing filter" = round(Genes / num_genes * 100, 1),
-            "Number of genes passing filter" = Genes,
+      mutate("Percentage (%)" = round(Genes / num_genes * 100, 1),
+            "Count" = Genes,
             " " = X) %>%
       select(" ",
-            "Number of genes passing filter",
-            "Percentage (%) of genes passing filter")
+            "Count",
+            "Percentage (%)")
     output$p2_htmloutput_sample_size <- renderText({
       paste("<b>Number of samples: ", num_samples, "</b>")
     })
@@ -270,8 +270,8 @@ server <- function(input, output, session) {
     percent_variance <- pca_variance / sum(pca_variance)
     PC1 <- as.integer(p2_counts_matrix.radio_principal_component_1())
     PC2 <- as.integer(p2_counts_matrix.radio_principal_component_2())
-    x_lab <- sprintf("PC%d, variance: %.2f%%", PC1, percent_variance[PC1] * 100)
-    y_lab <- sprintf("PC%d, variance: %.2f%%", PC2, percent_variance[PC2] * 100)
+    x_lab <- sprintf("PC%d, Variance Explained: %.2f%%", PC1, percent_variance[PC1] * 100)
+    y_lab <- sprintf("PC%d, Variance Explained: %.2f%%", PC2, percent_variance[PC2] * 100)
     
     plot <- ggplot(pca_df, aes(x = !!sym(paste0("PC", PC1)), y = !!sym(paste0("PC", PC2)))) +
       geom_point() +
