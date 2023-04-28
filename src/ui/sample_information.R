@@ -14,6 +14,8 @@ sample_information <- tabPanel("Sample Information",
                                      tabPanel(
                                        "Table Summary",
                                        br(),
+                                       htmlOutput("p1_htmloutput_rows"),
+                                       htmlOutput("p1_htmloutput_cols"),
                                        dataTableOutput("p1_datatableoutput_sample_information_summary")
                                      ),
                                      tabPanel(

@@ -67,9 +67,11 @@ server <- function(input, output, session) {
   p1_sample_information.radio_sample_information <- reactive({
     input$p1_radio_sample_information
   })
-  
+
   output$p1_datatableoutput_sample_information_summary <- renderDataTable({
     data <- p1_sample_information.load_data()
+    num_rows <- nrow(data)
+    num_cols <- ncol(data)
     metadata <- cbind(colnames(data), 
                       sapply(data, function(x) summarize_metadata(x)[[1]]),
                       sapply(data, function(x) summarize_metadata(x)[[2]])
@@ -77,6 +79,12 @@ server <- function(input, output, session) {
     data <- as.data.frame(metadata)
     colnames(data) <- c("Column Name", "Type", "Mean (sd) or Distinct Values")
     rownames(data) <- NULL
+    output$p1_htmloutput_rows <- renderText({
+      paste("<b>Number of rows: ", num_rows, "</b>")
+    })
+    output$p1_htmloutput_cols <- renderText({
+      paste("<b>Number of columns: ", num_cols, "</b>")
+    })
     return(data)
   }, options = list(
     rownames = FALSE,
@@ -148,16 +156,6 @@ server <- function(input, output, session) {
       return(5)
     input$p2_slider_pca
   })
-  
-  output$p1_datatableoutput_sample_information_data <- renderDataTable({
-    data <- p1_sample_information.load_data()
-    return(data)
-  }, options = list(
-    rownames = TRUE,
-    pageLength = 10,
-    autoWidth = TRUE,
-    scrollX = TRUE
-  ))
   
   output$p2_datatableoutput_filter_summary <- renderDataTable({
     data <- p2_counts_matrix.load_data()
