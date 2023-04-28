@@ -35,7 +35,7 @@ A demonstration of the application can be accessed at
 
 `./utils/helper_functions.R` holds functions used by elements in `server.R`.
 
-`./utils/stage_data.R.R` prepares the data needed for this application.
+`./utils/stage_data.R` prepares the data needed for this application.
 
 
 # Data sources
@@ -67,3 +67,103 @@ To start the app, run:
 ```
 Rscript app.R
 ```
+
+---
+
+# BF591 - R for Biological Sciences [Checklist](https://bu-bioinfo.github.io/r-for-biological-sciences/final-project.html#required-components)
+
+## Required Components
+
+### Sample Information Exploration
+
+The distinct values and distributions of sample information are important to understand before conducting analysis of corresponding sample data. This component allows the user to load and examine a sample information matrix.
+
+**Inputs**:
+
+* Sample information matrix in CSV format
+
+**Shiny Functionalities**:
+
+* Tab with a summary of the table that includes a summary of the type and values in each column
+* Tab with a data table displaying the sample information, with sortable columns
+* Tab with histograms, density plots, or violin plots of continuous variables.
+
+### Counts Matrix Exploration
+
+Exploring and visualizing counts matrices can aid in selecting gene count
+filtering strategies and understanding counts data structure. This component
+allows the user to choose different gene filtering thresholds and assess their
+effects using diagnostic plots of the counts matrix.
+
+**Inputs**:
+
+* Normalized counts matrix, by some method or other, in CSV format
+* Input controls that filter out genes based on their statistical properties:
+  - Slider to include genes with at least X percentile of variance
+  - Slider to include genes with at least X samples that are non-zero
+
+**Shiny Functionalities**:
+
+* Tab with text or a table summarizing the effect of the filtering, including:
+  - number of samples
+  - total number of genes
+  - number and % of genes passing current filter
+  - number and % of genes not passing current filter
+* Tab with diagnostic scatter plots, where genes passing filters are marked in
+a darker color, and genes filtered out are lighter:
+  - median count vs variance (consider log scale for plot)
+  - median count vs number of zeros
+* Tab with a clustered heatmap of counts remaining after filtering
+  - consider enabling log-transforming counts for visualization
+  - be sure to include a color bar in the legend
+* Tab with a scatter plot of [principal component
+analysis](#principal-component-analysis) projections. You may either:
+  - allow the user to select which principal components to plot in a scatter
+  plot (e.g. PC1 vs PC2)
+  - allow the user to plot the top $N$ principal components as a beeswarm plot
+  - be sure to include the % variance explained by each component in the plot
+  labels
+
+### Differential Expression
+
+Differential expression identifies which genes, if any, are implicated in a
+specific biological comparison. This component allows the user to load and
+explore a differential expression dataset.
+
+**Inputs**:
+
+* Results of a differential expression analysis in CSV format.
+  - If results are already made available, you may use those
+  - Otherwise perform a differential expression analysis using DESeq2, limma, or
+    edgeR from the provided counts file
+
+**Shiny Functionalities**:
+
+* Tab with sortable table displaying differential expression results
+  - Optional: enable gene name search functionality to filter rows of table
+* Tab with content similar to that described in [Assignment 7]
+
+### Visualization of Individual Gene Expression(s)
+
+Visualizing individual gene counts is sometimes useful for examining or
+verifying patterns identified by differential expression analysis. There are
+many different ways of visualizing counts for a single gene. This app allows
+counts from an arbitrary gene to be selected and visualized broken out by a
+desired sample information variable.
+
+**Input**:
+
+* Normalized counts matrix, by some method or other, in CSV format
+* Sample information matrix in CSV format
+* Input control that allows the user to choose one of the categorical fields
+found in the sample information matrix file
+* Input control that allows the user to choose one of the genes found in the
+counts matrix (hint: try implementing a [search box](https://stackoverflow.com/questions/47336114/searchbox-in-r-shiny))
+* Input control allowing the user to select one of [bar plot](#bar-chart),
+boxplot, violin plot, or beeswarm plot
+* A button that makes the thing go
+
+**Shiny Functionalities**:
+
+* Content displaying a plot of the selected type with the normalized gene counts
+for the selected gene split out by the categorical variable chosen
