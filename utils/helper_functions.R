@@ -100,9 +100,9 @@ multi_plot <- function(data, type, colname) {
   }
   return(
     plot + 
+    theme_minimal() +
     theme(legend.position = "bottom") + 
     ylab("Normalized Gene Counts") + 
-    scale_fill_brewer(palette = "Paired") +
-    theme_minimal()
+    scale_fill_brewer(palette = "Paired")
   )
 }
