@@ -2,10 +2,7 @@
 R Shiny application for BF591 final project
 
 # Application URL
-The application can be accessed at 
-
-# Video demonstration
-A demonstration of the application can be accessed at 
+The application can be accessed at http://mpeters15.shinyapps.io/bf591-final-project-mpeters15
 
 # Repository contents
 ```

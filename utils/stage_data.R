@@ -94,7 +94,26 @@ create_metadata_file <- function(file_path) {
   file.remove(file_path)
 }
 
+# filter_zero_var_genes <- function(verse_counts) {
+#   gene_vars <- verse_counts[-1] %>%
+#     apply(1, var) %>%
+#     as.vector()
+#   filtered <- verse_counts %>%
+#     filter(gene_vars > 0)
+#   return(filtered)
+# }
+
+# filter_mean_genes <- function(verse_counts, threshold) {
+#   gene_means <- verse_counts[-1] %>%
+#     apply(1, mean) %>%
+#     as.vector()
+#   filtered <- verse_counts %>%
+#     filter(gene_means >= threshold)
+#   return(filtered)
+# }
+
 convert_to_csv <- function(file_path, output_name) {
+  print(file_path)
   data <-
     read.table(
       file_path,
@@ -107,6 +126,12 @@ convert_to_csv <- function(file_path, output_name) {
       startsWith(data[[1]][1], "ENS")) {
     names(data)[1] <- "ensembl_id"
   }
+
+  # if (grepl("GSE64810_mlhd_DESeq2_norm_counts_adjust", file_path)) {
+  #     data <- filter_zero_var_genes(data)
+  #     data <- filter_mean_genes(data, 1)
+  #   }
+
   write.csv(data,
             file.path("data", output_name),
             row.names = FALSE,
